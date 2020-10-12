@@ -1,0 +1,50 @@
+/* consoleerrorlistener.vala
+ *
+ * Copyright 2020 Valio Valtokari <ubuntugeek1904@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+using Antlr4.Runtime.Error;
+
+public class Antlr4.Runtime.ConsoleErrorListener : BaseErrorListener
+{
+	/**
+	 * Provides a default instance of {@link ConsoleErrorListener}.
+	 */
+	public static ConsoleErrorListener INSTANCE { get; default = new ConsoleErrorListener(); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This implementation prints messages to {@link GLib.stderr} containing the
+	 * values of {@code line}, {@code char_position_in_line}, and {@code msg} using
+	 * the following format:</p>
+	 *
+	 * <pre>
+	 * line <em>line</em>:<em>char_position_in_line</em> <em>msg</em>
+	 * </pre>
+	 */
+	public override void syntax_error(Recognizer recognizer,
+							          Object offendingSymbol,
+							          int line,
+							          int char_position_in_line,
+							          string msg,
+							          RecognitionError e)
+	{
+		stderr.printf("line %d:%d %s", line, char_position_in_line, msg);
+	}
+
+}

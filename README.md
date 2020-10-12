@@ -1,5 +1,4 @@
 # antlr4-vala-runtime
-ANTLR4 Runtime for the Vala and Genie languages (and possibly C too!)
 This isn't complete yet. I'd appericiate help, especially on the documentation comments and fixing any errors and/or warnings in the code, like converting getter and setter methods to properties and other errors. Email me to ubuntugeek1904@gmail.com if you have any questions!
 
 [What is Vala?](https://wiki.gnome.org/Projects/Vala)
