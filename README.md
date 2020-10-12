@@ -3,6 +3,8 @@ This isn't complete yet. I'd appericiate help, especially on the documentation c
 
 [What is Vala?](https://wiki.gnome.org/Projects/Vala)
 
+[Valadoc syntax](https://valadoc.org/markup.htm)
+
 # What equipment to use with Vala?
 I personally use [Gnome Builder](https://wiki.gnome.org/Apps/Builder), but Visual Studio Code works as well. For telemetry-free VSCode, use [VSCodium](https://vscodium.com/).
 
