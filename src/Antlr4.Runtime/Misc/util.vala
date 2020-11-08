@@ -205,4 +205,20 @@ public class Antlr4.Runtime.Misc.Util
 
 		return m;
 	}
+
+	public static string join_string(string start, string end, string delim, string[] s) requires (s.length > 0)
+	{
+	    if (s.length != 1)
+	    {
+	        var builder = new StringBuilder();
+	        builder.append(start);
+	        var i = 0;
+
+	            for ( ; i < s.length - 1; i++)
+	                builder.append(s[i]).append(delim);
+
+	        return builder.str + s[i] + end;
+	    }
+	    else return start + s[0] + end;
+	}
 } 

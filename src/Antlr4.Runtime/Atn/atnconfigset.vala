@@ -24,7 +24,7 @@ using Antlr4.Runtime.Error;
  * info about the set, with support for combining similar configurations using a
  * graph-structured stack.
  */
-public class Antlr4.Runtime.Atn.ATNConfigSet : Gee.Set<ATNConfig>
+public class Antlr4.Runtime.Atn.ATNConfigSet : Gee.HashSet<ATNConfig>, Hashable
 {
 	/**
 	 * The reason that we need this is because we don't want the hash map to use
@@ -79,7 +79,7 @@ public class Antlr4.Runtime.Atn.ATNConfigSet : Gee.Set<ATNConfig>
 	 * All configs but hashed by (s, i, _, pi) not including context. Wiped out
 	 * when we go readonly as this set becomes a DFA state.
 	 */
-	public AbstractConfigHashSet config_lookup;
+	public AbstractConfigHashSet? config_lookup;
 
 	/** Track the elements as they are added to the set; supports get(i) */
 	public Gee.ArrayList<ATNConfig> configs { get; default = new Gee.ArrayList<ATNConfig>(7); }
@@ -87,10 +87,11 @@ public class Antlr4.Runtime.Atn.ATNConfigSet : Gee.Set<ATNConfig>
 	// TODO: these fields make me pretty uncomfortable but nice to pack up info together, saves recomputation
 	// TODO: can we track conflicts as they are added to save scanning configs later?
 	public int unique_alt;
-	/** Currently this is only used when we detect SLL conflict; this does
-	 *  not necessarily represent the ambiguous alternatives. In fact,
-	 *  I should also point out that this seems to include predicated alternatives
-	 *  that have predicates that evaluate to false. Computed in computeTargetState().
+	/**
+	 * Currently this is only used when we detect SLL conflict; this does
+	 * not necessarily represent the ambiguous alternatives. In fact,
+	 * I should also point out that this seems to include predicated alternatives
+	 * that have predicates that evaluate to false. Computed in computeTargetState().
  	 */
 	protected BitSet conflicting_alts;
 
@@ -143,106 +144,111 @@ public class Antlr4.Runtime.Atn.ATNConfigSet : Gee.Set<ATNConfig>
 		DoubleKeyMap<PredictionContext, PredictionContext, PredictionContext>? merge_cache) throws StateError
 	{
 		if (readonly) throw new StateError.ILLEGAL_STATE("This set is readonly");
-		if ( config.semanticContext!=SemanticContext.NONE ) {
+		if (config.semantic_context != SemanticContext.NONE)
 			has_semantic_context = true;
-		}
-		if (config.getOuterContextDepth() > 0) {
+
+		if (config.outer_context_depth > 0)
 			dips_into_outer_context = true;
-		}
-		ATNConfig existing = config_lookup.getOrAdd(config);
-		if ( existing==config ) { // we added this new one
+
+		ATNConfig existing = config_lookup.get_or_add(config);
+		if (existing == config) // we added this new one
+		{
 			cached_hash_code = -1;
 			configs.add(config);  // track order here
 			return true;
 		}
 		// a previous (s,i,pi,_), merge with it and save result
-		bool rootIsWildcard = !full_ctx;
+		bool root_is_wildcard = !full_ctx;
 		PredictionContext merged =
-			PredictionContext.merge(existing.context, config.context, rootIsWildcard, merge_cache);
+			PredictionContext.merge(existing.context, config.context, root_is_wildcard, merge_cache);
 		// no need to check for existing.context, config.context in cache
 		// since only way to create new graphs is "call rule" and here. We
 		// cache at both places.
-		existing.reachesIntoOuterContext =
-			Math.max(existing.reachesIntoOuterContext, config.reachesIntoOuterContext);
+		existing.reaches_into_outer_context =
+			Util.max(existing.reaches_into_outer_context, config.reaches_into_outer_context);
 
 		// make sure to preserve the precedence filter suppression during the merge
-		if (config.isPrecedenceFilterSuppressed()) {
-			existing.setPrecedenceFilterSuppressed(true);
-		}
+		if (config.precedence_filter_suppressed)
+			existing.precedence_filter_suppressed = true;
 
 		existing.context = merged; // replace context; no need to alt mapping
 		return true;
 	}
 
 	/** Return a List holding list of configs */
-    public List<ATNConfig> elements() { return configs; }
+    public Gee.List<ATNConfig> elements { get { return configs; } }
 
-	public Set<ATNState> getStates() {
-		Set<ATNState> states = new HashSet<ATNState>();
-		for (ATNConfig c : configs) {
-			states.add(c.state);
+	public Gee.Set<ATNState> states
+	{
+	    get
+	    {
+	    	Gee.Set<ATNState> states = new Gee.HashSet<ATNState>();
+		    foreach (ATNConfig c in configs)
+			    states.add(c.state);
+		    return states;
 		}
-		return states;
 	}
 
 	/**
-	 * Gets the complete set of represented alternatives for the configuration
+	 * The complete set of represented alternatives for the configuration
 	 * set.
-	 *
-	 * @return the set of represented alternatives in this configuration set
 	 *
 	 * @since 4.3
 	 */
-
-	public BitSet getAlts() {
-		BitSet alts = new BitSet();
-		for (ATNConfig config : configs) {
-			alts.set(config.alt);
-		}
-		return alts;
-	}
-
-	public List<SemanticContext> getPredicates() {
-		List<SemanticContext> preds = new ArrayList<SemanticContext>();
-		for (ATNConfig c : configs) {
-			if ( c.semanticContext!=SemanticContext.NONE ) {
-				preds.add(c.semanticContext);
-			}
-		}
-		return preds;
-	}
-
-	public ATNConfig get(int i) { return configs.get(i); }
-
-	public void optimizeConfigs(ATNSimulator interpreter) {
-		if ( readonly ) throw new IllegalStateException("This set is readonly");
-		if ( config_lookup.isEmpty() ) return;
-
-		for (ATNConfig config : configs) {
-//			int before = PredictionContext.getAllContextNodes(config.context).size();
-			config.context = interpreter.getCachedContext(config.context);
-//			int after = PredictionContext.getAllContextNodes(config.context).size();
-//			System.out.println("configs "+before+"->"+after);
+	[Version (since = "4.3")]
+	public BitSet alts
+	{
+	    get
+	    {
+		    BitSet alts = new BitSet();
+		    foreach (ATNConfig config in configs)
+			    alts.set(config.alt);
+		    return alts;
 		}
 	}
 
-	@Override
-	public bool add_all(Collection<? extends ATNConfig> coll) {
-		for (ATNConfig c : coll) add(c);
+	public Gee.List<SemanticContext> predicates
+	{
+	    get
+	    {
+		    Gee.List<SemanticContext> preds = new Gee.ArrayList<SemanticContext>();
+		    foreach (ATNConfig c in configs)
+		    {
+			    if (c.semantic_context != SemanticContext.NONE )
+			    	preds.add(c.semantic_context);
+		    }
+		    return preds;
+		}
+	}
+
+	public ATNConfig get(int i) { return configs[i]; }
+
+	public void optimize_configs(ATNSimulator interpreter)
+	{
+		if (readonly) throw new StateError.ILLEGAL_STATE("This set is readonly");
+		if (config_lookup.is_empty) return;
+
+		foreach (ATNConfig config in configs)
+		{
+//			int before = PredictionContext.get_all_context_nodes(config.context).size;
+			config.context = interpreter.get_cached_context(config.context);
+//			int after = PredictionContext.get_all_context_nodes(config.context).size;
+//			stdout.printf("configs %d->%d", before, after);
+		}
+	}
+
+	public bool add_all(Gee.Collection<ATNConfig> coll)
+	{
+		foreach (ATNConfig c in coll) add(c);
 		return false;
 	}
 
-	@Override
-	public bool equals(Object o) {
-		if (o == this) {
+	public bool equals(ATNConfigSet? o)
+	{
+		if (o == this)
 			return true;
-		}
-		else if (!(o instanceof ATNConfigSet)) {
-			return false;
-		}
 
-//		System.out.print("equals " + this + ", " + o+" = ");
-		ATNConfigSet other = (ATNConfigSet)o;
+//		stdout.printf("equals %s, %s = ", this, o);
 		bool same = configs!=null &&
 			configs.equals(other.configs) &&  // includes stack context
 			this.full_ctx == other.full_ctx &&
@@ -255,77 +261,89 @@ public class Antlr4.Runtime.Atn.ATNConfigSet : Gee.Set<ATNConfig>
 		return same;
 	}
 
-	@Override
-	public int hashCode() {
-		if (isReadonly()) {
-			if (cached_hash_code == -1) {
-				cached_hash_code = configs.hashCode();
-			}
+	public override uint64 hash_code()
+	{
+		if (readonly)
+		{
+			if (cached_hash_code == -1)
+				cached_hash_code = configs.hash_code();
 
 			return cached_hash_code;
 		}
 
-		return configs.hashCode();
+		return configs.hash_code();
 	}
 
-	@Override
-	public int size() {
-		return configs.size();
-	}
-
-	@Override
-	public bool isEmpty() {
-		return configs.isEmpty();
-	}
-
-	@Override
-	public bool contains(Object o) {
-		if (config_lookup == null) {
-			throw new UnsupportedOperationException("This method is not implemented for readonly sets.");
+	public int size
+	{
+	    get
+	    {
+		    return configs.size;
 		}
+	}
+
+	public bool is_empty
+	{
+	    get
+	    {
+		    return configs.is_empty;
+		}
+	}
+
+	public bool contains(ATNConfig o) throws StateError
+	{
+		if (config_lookup == null) throw new StateError.ILLEGAL_STATE("This method is not implemented for readonly sets.");
 
 		return config_lookup.contains(o);
 	}
 
-	public bool containsFast(ATNConfig obj) {
-		if (config_lookup == null) {
-			throw new UnsupportedOperationException("This method is not implemented for readonly sets.");
+	public bool contains_fast(ATNConfig obj) throws StateError
+	{
+		if (config_lookup == null) throw new StateError.ILLEGAL_STATE("This method is not implemented for readonly sets.");
+
+		return config_lookup.contains_fast(obj);
+	}
+
+	public Gee.Iterator<ATNConfig> iterator
+	{
+	    get
+	    {
+		    return configs.iterator;
 		}
-
-		return config_lookup.containsFast(obj);
 	}
 
-	@Override
-	public Iterator<ATNConfig> iterator() {
-		return configs.iterator();
-	}
-
-	@Override
-	public void clear() {
-		if ( readonly ) throw new IllegalStateException("This set is readonly");
+	public void clear()
+	{
+		if (readonly) throw new StateError.ILLEGAL_STATE("This set is readonly");
 		configs.clear();
 		cached_hash_code = -1;
 		config_lookup.clear();
 	}
 
-	public bool isReadonly() {
-		return readonly;
+	public bool readonly
+	{
+	    get
+	    {
+		    return readonly;
+		}
+		set
+		{
+		    this.readonly = value;
+		    config_lookup = null;
+		}
 	}
 
-	public void setReadonly(bool readonly) {
-		this.readonly = readonly;
-		config_lookup = null; // can't mod, no need for lookup cache
-	}
-
-	@Override
-	public String toString() {
+	public string to_string()
+	{
 		StringBuilder buf = new StringBuilder();
-		buf.append(elements().toString());
-		if ( has_semantic_context ) buf.append(",has_semantic_context=").append(has_semantic_context);
-		if ( unique_alt!=ATN.INVALID_ALT_NUMBER ) buf.append(",unique_alt=").append(unique_alt);
-		if ( conflicting_alts!=null ) buf.append(",conflicting_alts=").append(conflicting_alts);
-		if ( dips_into_outer_context ) buf.append(",dips_into_outer_context");
-		return buf.toString();
+		var element_strs = new string[elements.size];
+		for (var i = 0; i < elements; i++) element_strs[i] = elements[i].to_string();
+		buf.append(Util.join_string("[", "]", ", ", element_strs));
+		if (has_semantic_context) buf.append(", has_semantic_context: true");
+		if (unique_alt != ATN.INVALID_ALT_NUMBER) buf.append(", unique_alt: " + unique_alt.to_string());
+		if (conflicting_alts != null) buf.append(", conflicting_alts: ").append(conflicting_alts.to_string());
+		if (dips_into_outer_context) buf.append(", dips_into_outer_context: true");
+		return buf.str;
 	}
 
 	// satisfy interface
@@ -360,9 +378,11 @@ public class Antlr4.Runtime.Atn.ATNConfigSet : Gee.Set<ATNConfig>
 		throw new UnsupportedOperationException();
 	}
 
-	public static abstract class AbstractConfigHashSet extends Array2DHashSet<ATNConfig> {
+	public abstract class AbstractConfigHashSet : Gee.HashSet<AtnConfig>
+	{
 
-		public AbstractConfigHashSet(AbstractEqualityComparator<? super ATNConfig> comparator) {
+		public AbstractConfigHashSet(AbstractEqualityComparator<ATNConfig> comparator)
+		{
 			this(comparator, 16, 2);
 		}
 
@@ -370,7 +390,6 @@ public class Antlr4.Runtime.Atn.ATNConfigSet : Gee.Set<ATNConfig>
 			super(comparator, initialCapacity, initialBucketCapacity);
 		}
 
-		@Override
 		protected /* final */ ATNConfig asElementType(Object o) {
 			if (!(o instanceof ATNConfig)) {
 				return null;
@@ -379,15 +398,16 @@ public class Antlr4.Runtime.Atn.ATNConfigSet : Gee.Set<ATNConfig>
 			return (ATNConfig)o;
 		}
 
-		@Override
-		protected /* final */ ATNConfig[][] createBuckets(int capacity) {
-			return new ATNConfig[capacity][];
+		protected sealed Gee.List<Gee.List<AtnConfig>> create_buckets(int capacity)
+		{
+			var result = new Gee.ArrayList<Gee.List<AtnConfig>>();
+			result.add_all(create_bucket(capacity));
+			return result;
 		}
 
-		@Override
-		protected /* final */ ATNConfig[] createBucket(int capacity) {
-			return new ATNConfig[capacity];
+		protected sealed Gee.List<AtnConfig> create_bucket(int capacity)
+		{
+			return new Gee.ArrayList<ATNConfig>.wrap(new AtnConfig[capacity]);
 		}
-
 	}
 }

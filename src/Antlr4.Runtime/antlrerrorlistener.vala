@@ -20,7 +20,7 @@ using Antlr4.Runtime.Error;
 using Antlr4.Runtime.Misc;
 
 /** How to emit recognition errors. */
-public interface Antlr4.Runtime.ANTLRErrorListener : GLib.Object
+public interface Antlr4.Runtime.ANTLRErrorListener : ANTLRObject
 {
 	/**
 	 * Upon syntax error, notify any interested parties. This is not how to
