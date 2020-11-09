@@ -45,7 +45,7 @@ public class Antlr4.Runtime.Atn.DecisionEventInfo
 
 	/**
 	 * The configuration set containing additional information relevant to the
-	 * prediction state when the current event occurred, or {@code null} if no
+	 * prediction state when the current event occurred, or {{{null}}} if no
 	 * additional information is relevant or available.
 	 */
 	public ATNConfigSet configs { get; protected set; }
@@ -67,8 +67,8 @@ public class Antlr4.Runtime.Atn.DecisionEventInfo
 	public int stop_index { get; protected set; }
 
 	/**
-	 * {@code true} if the current event occurred during LL prediction;
-	 * otherwise, {@code false} if the input occurred during SLL prediction.
+	 * {{{true}}} if the current event occurred during LL prediction;
+	 * otherwise, {{{false}}} if the input occurred during SLL prediction.
 	 */
 	public bool full_ctx { get; protected set; }
 

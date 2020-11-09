@@ -39,7 +39,7 @@ public interface Antlr4.Runtime.Tree.BaseTree : GLib.Object
 	 */
 	public abstract GLib.Object payload { get; }
 
-	/** If there are children, get the {@code i}th value indexed from 0. */
+	/** If there are children, get the {{{i}}}th value indexed from 0. */
 	public abstract BaseTree? child_at(uint i);
 
 	/**

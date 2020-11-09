@@ -71,7 +71,7 @@ public abstract class Antlr4.Runtime.Recognizer<Symbol, ATNInterpreter> : GLib.O
 	/**
 	 * Get a map from token names to token types.
 	 *
-	 * <p>Used for XPath and tree pattern compilation.</p>
+	 * Used for XPath and tree pattern compilation.
 	 */
 	public Gee.Map<string, int?> token_type_map
 	{
@@ -108,7 +108,7 @@ public abstract class Antlr4.Runtime.Recognizer<Symbol, ATNInterpreter> : GLib.O
 	/**
 	 * Get a map from rule names to rule indexes.
 	 *
-	 * <p>Used for XPath and tree pattern compilation.</p>
+	 * Used for XPath and tree pattern compilation.
 	 */
 	public Gee.Map<string, int> rule_index_map
 	{
@@ -143,8 +143,8 @@ public abstract class Antlr4.Runtime.Recognizer<Symbol, ATNInterpreter> : GLib.O
 	 * If this recognizer was generated, it will have a serialized ATN
 	 * representation of the grammar.
 	 *
-	 * <p>For interpreters, we don't know their serialized ATN despite having
-	 * created the interpreter from it.</p>
+	 * For interpreters, we don't know their serialized ATN despite having
+	 * created the interpreter from it.
 	 */
 	public string serialized_atn
 	{

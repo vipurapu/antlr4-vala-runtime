@@ -28,10 +28,9 @@ public class Antlr4.Runtime.ConsoleErrorListener : BaseErrorListener
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>
 	 * This implementation prints messages to {@link GLib.stderr} containing the
-	 * values of {@code line}, {@code char_position_in_line}, and {@code msg} using
-	 * the following format:</p>
+	 * values of {{{line}}}, {{{char_position_in_line}}}, and {{{msg}}} using
+	 * the following format:
 	 *
 	 * <pre>
 	 * line <em>line</em>:<em>char_position_in_line</em> <em>msg</em>

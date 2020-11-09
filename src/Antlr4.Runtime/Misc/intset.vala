@@ -30,7 +30,7 @@ public interface Antlr4.Runtime.Misc.IntSet : GLib.Object
 	 *
 	 * @param el the value to add
 	 *
-	 * @throws IllegalStateException if the current set is read-only
+	 * @throws StateError if the current set is read-only
 	 */
 	public abstract void add(int el) throws StateError;
 
@@ -66,10 +66,8 @@ public interface Antlr4.Runtime.Misc.IntSet : GLib.Object
 	 * following expressions are equivalent for input non-null {@link IntSet}
 	 * instances  x} and  y}.
 	 *
-	 * <ul>
-	 * <li> x.complement(y)}</li>
-	 * <li> y.subtract(x)}</li>
-	 * </ul>
+	 *  * x.complement(y)}
+	 *  * y.subtract(x)}
 	 *
 	 * @param elements The set to compare with the current set. A  null
 	 * argument is treated as though it were an empty set.
@@ -84,7 +82,6 @@ public interface Antlr4.Runtime.Misc.IntSet : GLib.Object
 	 * Return a new {@link IntSet} object containing all elements that are
 	 * present in the current set, the specified set  a}, or both.
 	 *
-	 * <p>
 	 * This method is similar to {@link #addAll(IntSet)}, but returns a new
 	 * {@link IntSet} instance instead of modifying the current set.</p>
 	 *
@@ -103,10 +100,8 @@ public interface Antlr4.Runtime.Misc.IntSet : GLib.Object
 	 * The following expressions are equivalent for input non-null
 	 * {@link IntSet} instances x and y.
 	 *
-	 * <ul>
-	 * <li> y.subtract(x)}</li>
-	 * <li> x.complement(y)}</li>
-	 * </ul>
+	 *  * y.subtract(x)}
+	 *  * x.complement(y)}
 	 *
 	 * @param a The set to compare with the current set. A null
 	 * argument is treated as though it were an empty set.
@@ -154,7 +149,7 @@ public interface Antlr4.Runtime.Misc.IntSet : GLib.Object
 	 *
 	 * @param el the value to remove
 	 *
-	 * @exception IllegalStateException if the current set is read-only
+	 * @throws StateError if the current set is read-only
 	 */
 	public abstract void remove(int el) throws StateError;
 
