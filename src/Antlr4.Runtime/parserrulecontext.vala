@@ -32,7 +32,7 @@ using Antlr4.Runtime.Error;
  * are the objects that are returned from rules.
  *
  * Note text is not an actual field of a rule return value; it is computed
- * from start and stop using the input stream's toString() method.  I
+ * from start and stop using the input stream's {{{toString()}}} method.  I
  * could add a ctor to this so that we can pass in and store the input
  * stream, but I'm not sure we want to do that.  It would seem to be undefined
  * to get the .text property anyway if the rule matches tokens from multiple
@@ -66,8 +66,8 @@ public class Antlr4.Runtime.ParserRuleContext : RuleContext
 	 * for each element in the children list. For example, for a rule
 	 * invocation there is the invoking state and the following state.
 	 *
-	 * The parser setState() method updates field s and adds it to this list
-	 * if we are debugging/tracing.
+	 * The parser {{{setState()}}} method updates field s and adds it to this
+	 * list if we are debugging/tracing.
 	 *
 	 * This does not trace states visited during prediction.
 	 */
@@ -78,7 +78,7 @@ public class Antlr4.Runtime.ParserRuleContext : RuleContext
 
 	/**
 	 * The error that forced this rule to return. If the rule successfully
-	 * completed, this is {@code null}.
+	 * completed, this is {{{null}}}.
 	 */
 	public RecognitionError? error;
 

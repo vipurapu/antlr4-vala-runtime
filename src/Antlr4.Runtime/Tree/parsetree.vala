@@ -23,7 +23,7 @@
  * This node represents both internal nodes, rule invocations,
  * and leaf nodes, token matches.
  *
- * <p>The payload is either a {@link Token} or a {@link RuleContext} object.</p>
+ * The payload is either a {@link Token} or a {@link RuleContext} object.
  */
 public interface Antlr4.Runtime.Tree.ParseTree : SyntaxTree
 {

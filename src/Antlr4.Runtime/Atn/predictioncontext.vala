@@ -22,15 +22,15 @@ using Antlr4.Runtime;
 public abstract class Antlr4.Runtime.Atn.PredictionContext : GLib.Object, Hashable
 {
 	/**
-	 * Represents {@code $} in local context prediction, which means wildcard.
-	 * {@code *+x = *}.
+	 * Represents {{{$}}} in local context prediction, which means wildcard.
+	 * {{{*+x = *}}}.
 	 */
 	public static EmptyPredictionContext EMPTY { get; default = new EmptyPredictionContext(); }
 
 	/**
-	 * Represents {@code $} in an array in full context mode, when {@code $}
-	 * doesn't mean wildcard: {@code $ + x = [$,x]}. Here,
-	 * {@code $} = {@link #EMPTY_RETURN_STATE}.
+	 * Represents {{{$}}} in an array in full context mode, when {{{$}}}
+	 * doesn't mean wildcard: {{{$ + x = [$,x]}}}. Here,
+	 * {{{$}}} = {@link #EMPTY_RETURN_STATE}.
 	 */
 	public const int EMPTY_RETURN_STATE = int.MAX;
 
@@ -43,22 +43,22 @@ public abstract class Antlr4.Runtime.Atn.PredictionContext : GLib.Object, Hashab
 	 * Stores the computed hash code of this {@link PredictionContext}. The hash
 	 * code is computed in parts to match the following reference algorithm.
 	 *
-	 * <pre>
+	 * {{{
 	 *  private uint64 reference_hash_code()
 	 *  {
-	 *      uint64 hash = {@link MurmurHash#initialize MurmurHash.initialize}({@link #INITIAL_HASH});
+	 *      uint64 hash = MurmurHash.initialize(#INITIAL_HASH);
 	 *
-	 *      for (int i = 0; i &lt; {@link #size}; i++)
+	 *      for (int i = 0; i < size; i++)
 	 *
-	 *          hash = {@link MurmurHash#update MurmurHash.update}(hash, {@link #getParent getParent}(i));
+	 *          hash = {@link MurmurHash#update MurmurHash.update}(hash, getParent(i));
 	 *
-	 *      for (int i = 0; i &lt; {@link #size}; i++)
-	 *          hash = {@link MurmurHash#update MurmurHash.update}(hash, {@link #getReturnState getReturnState}(i));
+	 *      for (int i = 0; i < size; i++)
+	 *          hash = MurmurHash.update(hash, getReturnState(i));
 	 *
-	 *      hash = {@link MurmurHash#finish MurmurHash.finish}(hash, 2 * {@link #size});
+	 *      hash = MurmurHash.finish(hash, 2 * size);
 	 *      return hash;
 	 *  }
-	 * </pre>
+	 * }}}
 	 */
 	public int cached_hash_code;
 
@@ -69,7 +69,7 @@ public abstract class Antlr4.Runtime.Atn.PredictionContext : GLib.Object, Hashab
 
 	/**
 	 * Convert a {@link RuleContext} tree to a {@link PredictionContext} graph.
-	 * Return {@link #EMPTY} if {@code outer_context} is empty or null.
+	 * Return {@link #EMPTY} if {{{outer_context}}} is empty or null.
 	 */
 	public static PredictionContext from_rule_context(ATN atn, RuleContext? outer_context)
 	{
@@ -188,27 +188,27 @@ public abstract class Antlr4.Runtime.Atn.PredictionContext : GLib.Object, Hashab
 	/**
 	 * Merge two {@link SingletonPredictionContext} instances.
 	 *
-	 * <p>Stack tops equal, parents merge is same; return left graph.<br>
-	 * <embed src="images/SingletonMerge_SameRootSamePar.svg" type="image/svg+xml"/></p>
+	 * Stack tops equal, parents merge is same; return left graph.
+	 * <embed src="images/SingletonMerge_SameRootSamePar.svg" type="image/svg+xml"/>
 	 *
-	 * <p>Same stack top, parents differ; merge parents giving array node, then
+	 * Same stack top, parents differ; merge parents giving array node, then
 	 * remainders of those graphs. A new root node is created to point to the
-	 * merged parents.<br>
-	 * <embed src="images/SingletonMerge_SameRootDiffPar.svg" type="image/svg+xml"/></p>
+	 * merged parents.<<BR>>
+	 * <embed src="images/SingletonMerge_SameRootDiffPar.svg" type="image/svg+xml"/>
 	 *
-	 * <p>Different stack tops pointing to same parent. Make array node for the
+	 * Different stack tops pointing to same parent. Make array node for the
 	 * root where both element in the root point to the same (original)
-	 * parent.<br>
-	 * <embed src="images/SingletonMerge_DiffRootSamePar.svg" type="image/svg+xml"/></p>
+	 * parent.<<BR>>
+	 * <embed src="images/SingletonMerge_DiffRootSamePar.svg" type="image/svg+xml"/>
 	 *
-	 * <p>Different stack tops pointing to different parents. Make array node for
+	 * Different stack tops pointing to different parents. Make array node for
 	 * the root where each element points to the corresponding original
-	 * parent.<br>
-	 * <embed src="images/SingletonMerge_DiffRootDiffPar.svg" type="image/svg+xml"/></p>
+	 * parent.<<BR>>
+	 * <embed src="images/SingletonMerge_DiffRootDiffPar.svg" type="image/svg+xml"/>
 	 *
 	 * @param a the first {@link SingletonPredictionContext}
 	 * @param b the second {@link SingletonPredictionContext}
-	 * @param rootIsWildcard {@code true} if this is a local-context merge,
+	 * @param rootIsWildcard {{{true}}} if this is a local-context merge,
 	 * otherwise false to indicate a full-context merge
 	 * @param mergeCache
 	 */
@@ -283,37 +283,37 @@ public abstract class Antlr4.Runtime.Atn.PredictionContext : GLib.Object, Hashab
 	 * {@link #EMPTY}. In the following diagrams, the symbol {@code $} is used
 	 * to represent {@link #EMPTY}.
 	 *
-	 * <h2>Local-Context Merges</h2>
+	 * == Local-Context Merges ==
 	 *
-	 * <p>These local-context merge operations are used when {@code rootIsWildcard}
-	 * is true.</p>
+	 * These local-context merge operations are used when {{{rootIsWildcard}}}
+	 * is true.
 	 *
-	 * <p>{@link #EMPTY} is superset of any graph; return {@link #EMPTY}.<br>
-	 * <embed src="images/LocalMerge_EmptyRoot.svg" type="image/svg+xml"/></p>
+	 * {@link #EMPTY} is superset of any graph; return {@link #EMPTY}.<<BR>>
+	 * <embed src="images/LocalMerge_EmptyRoot.svg" type="image/svg+xml"/>
 	 *
-	 * <p>{@link #EMPTY} and anything is {@code #EMPTY}, so merged parent is
-	 * {@code #EMPTY}; return left graph.<br>
-	 * <embed src="images/LocalMerge_EmptyParent.svg" type="image/svg+xml"/></p>
+	 * {@link #EMPTY} and anything is {{{#EMPTY}}}, so merged parent is
+	 * {{{#EMPTY}}}; return left graph.<<BR>>
+	 * <embed src="images/LocalMerge_EmptyParent.svg" type="image/svg+xml"/>
 	 *
-	 * <p>Special case of last merge if local context.<br>
-	 * <embed src="images/LocalMerge_DiffRoots.svg" type="image/svg+xml"/></p>
+	 * Special case of last merge if local context.<<BR>>
+	 * <embed src="images/LocalMerge_DiffRoots.svg" type="image/svg+xml"/>
 	 *
-	 * <h2>Full-Context Merges</h2>
+	 * == Full-Context Merges ==
 	 *
-	 * <p>These full-context merge operations are used when {@code rootIsWildcard}
-	 * is false.</p>
+	 * These full-context merge operations are used when {{{rootIsWildcard}}}
+	 * is false.
 	 *
-	 * <p><embed src="images/FullMerge_EmptyRoots.svg" type="image/svg+xml"/></p>
+	 * <embed src="images/FullMerge_EmptyRoots.svg" type="image/svg+xml"/>
 	 *
-	 * <p>Must keep all contexts; {@link #EMPTY} in array is a special value (and
-	 * null parent).<br>
-	 * <embed src="images/FullMerge_EmptyRoot.svg" type="image/svg+xml"/></p>
+	 * Must keep all contexts; {@link #EMPTY} in array is a special value (and
+	 * null parent).<<BR>>
+	 * <embed src="images/FullMerge_EmptyRoot.svg" type="image/svg+xml"/>
 	 *
-	 * <p><embed src="images/FullMerge_SameRoot.svg" type="image/svg+xml"/></p>
+	 * <embed src="images/FullMerge_SameRoot.svg" type="image/svg+xml"/>
 	 *
 	 * @param a the first {@link SingletonPredictionContext}
 	 * @param b the second {@link SingletonPredictionContext}
-	 * @param rootIsWildcard {@code true} if this is a local-context merge,
+	 * @param rootIsWildcard {{{true}}} if this is a local-context merge,
 	 * otherwise false to indicate a full-context merge
 	 */
 	public static PredictionContext mergeRoot(SingletonPredictionContext a,
@@ -347,21 +347,21 @@ public abstract class Antlr4.Runtime.Atn.PredictionContext : GLib.Object, Hashab
 	/**
 	 * Merge two {@link ArrayPredictionContext} instances.
 	 *
-	 * <p>Different tops, different parents.<br>
-	 * <embed src="images/ArrayMerge_DiffTopDiffPar.svg" type="image/svg+xml"/></p>
+	 * Different tops, different parents.<<BR>>
+	 * <embed src="images/ArrayMerge_DiffTopDiffPar.svg" type="image/svg+xml"/>
 	 *
-	 * <p>Shared top, same parents.<br>
-	 * <embed src="images/ArrayMerge_ShareTopSamePar.svg" type="image/svg+xml"/></p>
+	 * Shared top, same parents.<<BR>>
+	 * <embed src="images/ArrayMerge_ShareTopSamePar.svg" type="image/svg+xml"/>
 	 *
-	 * <p>Shared top, different parents.<br>
-	 * <embed src="images/ArrayMerge_ShareTopDiffPar.svg" type="image/svg+xml"/></p>
+	 * Shared top, different parents.<<BR>>
+	 * <embed src="images/ArrayMerge_ShareTopDiffPar.svg" type="image/svg+xml"/>
 	 *
-	 * <p>Shared top, all shared parents.<br>
-	 * <embed src="images/ArrayMerge_ShareTopSharePar.svg" type="image/svg+xml"/></p>
+	 * Shared top, all shared parents.<<BR>>
+	 * <embed src="images/ArrayMerge_ShareTopSharePar.svg" type="image/svg+xml"/>
 	 *
-	 * <p>Equal tops, merge parents and reduce top to
-	 * {@link SingletonPredictionContext}.<br>
-	 * <embed src="images/ArrayMerge_EqualTop.svg" type="image/svg+xml"/></p>
+	 * Equal tops, merge parents and reduce top to
+	 * {@link SingletonPredictionContext}.<<BR>>
+	 * <embed src="images/ArrayMerge_EqualTop.svg" type="image/svg+xml"/>
 	 */
 	public static PredictionContext mergeArrays(
 		ArrayPredictionContext a,
@@ -473,7 +473,7 @@ public abstract class Antlr4.Runtime.Atn.PredictionContext : GLib.Object, Hashab
 	}
 
 	/**
-	 * Make pass over all <em>M</em> {@code parents}; merge any {@code equals()}
+	 * Make pass over all //M// {{{parents}}}; merge any {{{equals()}}}
 	 * ones.
 	 */
 	protected static void combineCommonParents(PredictionContext[] parents) {

@@ -20,7 +20,7 @@ using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Error;
 
 /**
- * Specialized {@link Set}{@code <}{@link ATNConfig}{@code >} that can track
+ * Specialized {@link Set}{{{<}}}{@link ATNConfig}{{{>}}} that can track
  * info about the set, with support for combining similar configurations using a
  * graph-structured stack.
  */
@@ -29,7 +29,7 @@ public class Antlr4.Runtime.Atn.ATNConfigSet : Gee.HashSet<ATNConfig>, Hashable
 	/**
 	 * The reason that we need this is because we don't want the hash map to use
 	 * the standard hash code and equals. We need all configurations with the same
-	 * {@code (s,i,_,semctx)} to be equal. Unfortunately, this key effectively doubles
+	 * {{{(s,i,_,semctx)}}} to be equal. Unfortunately, this key effectively doubles
 	 * the number of objects associated with ATNConfigs. The other solution is to
 	 * use a hash table that lets us specify the equals/hashcode operation.
 	 */
@@ -131,13 +131,13 @@ public class Antlr4.Runtime.Atn.ATNConfigSet : Gee.HashSet<ATNConfig>, Hashable
 
 	/**
 	 * Adding a new config means merging contexts with existing configs for
-	 * {@code (s, i, pi, _)}, where {@code s} is the
-	 * {@link ATNConfig#state}, {@code i} is the {@link ATNConfig#alt}, and
-	 * {@code pi} is the {@link ATNConfig#semanticContext}. We use
-	 * {@code (s,i,pi)} as key.
+	 * {{{(s, i, pi, _)}}}, where {{{s}}} is the
+	 * {@link ATNConfig#state}, {{{i}}} is the {@link ATNConfig#alt}, and
+	 * {{{pi}}} is the {@link ATNConfig#semanticContext}. We use
+	 * {{{(s,i,pi)}}} as key.
 	 *
-	 * <p>This method updates {@link #dips_into_outer_context} and
-	 * {@link #has_semantic_context} when necessary.</p>
+	 * This method updates {@link #dips_into_outer_context} and
+	 * {@link #has_semantic_context} when necessary.
 	 */
 	public bool add_with_keymap(
 		ATNConfig config,

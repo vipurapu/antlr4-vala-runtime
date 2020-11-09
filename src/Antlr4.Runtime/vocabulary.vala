@@ -35,101 +35,65 @@ public interface Antlr4.Runtime.Vocabulary : GLib.Object
 
 	/**
 	 * Gets the string literal associated with a token type. The string returned
-	 * by this method, when not {@code null}, can be used unaltered in a parser
+	 * by this method, when not {{{null}}}, can be used unaltered in a parser
 	 * grammar to represent this token type.
 	 *
-	 * <p>The following table shows examples of lexer rules and the literal
-	 * names assigned to the corresponding token types.</p>
+	 * The following table shows examples of lexer rules and the literal
+	 * names assigned to the corresponding token types.
 	 *
-	 * <table>
-	 *  <tr>
-	 *   <th>Rule</th>
-	 *   <th>Literal Name</th>
-	 *   <th>Java String Literal</th>
-	 *  </tr>
-	 *  <tr>
-	 *   <td>{@code THIS : 'this';}</td>
-	 *   <td>{@code 'this'}</td>
-	 *   <td>{@code "'this'"}</td>
-	 *  </tr>
-	 *  <tr>
-	 *   <td>{@code SQUOTE : '\'';}</td>
-	 *   <td>{@code '\''}</td>
-	 *   <td>{@code "'\\''"}</td>
-	 *  </tr>
-	 *  <tr>
-	 *   <td>{@code ID : [A-Z]+;}</td>
-	 *   <td>n/a</td>
-	 *   <td>{@code null}</td>
-	 *  </tr>
-	 * </table>
+	 * || ''Rule''             || ''Literal Name'' || Java String Literal ||
+	 * || {{{THIS : 'this';}}} || {{{'this'}}}     || {{{"'this'"}}}      ||
+	 * || {{{SQUOTE : '\'';}}} || {{{'\''}}}       || {{{"'\\''"}}}       ||
+	 * || {{{ID : [A-Z]+;}}}   || n/a              || {{{null}}}          ||
 	 *
 	 * @param token_type The token type.
 	 *
 	 * @return The string literal associated with the specified token type, or
-	 * {@code null} if no string literal is associated with the type.
+	 * {{{null}}} if no string literal is associated with the type.
 	 */
 	public abstract string get_literal_name(int token_type);
 
 	/**
 	 * Gets the symbolic name associated with a token type. The string returned
-	 * by this method, when not {@code null}, can be used unaltered in a parser
+	 * by this method, when not {{{null}}}, can be used unaltered in a parser
 	 * grammar to represent this token type.
 	 *
-	 * <p>This method supports token types defined by any of the following
-	 * methods:</p>
+	 * This method supports token types defined by any of the following
+	 * methods:
 	 *
-	 * <ul>
-	 *  <li>Tokens created by lexer rules.</li>
-	 *  <li>Tokens defined in a <code>tokens{}</code> block in a lexer or parser
-	 *  grammar.</li>
-	 *  <li>The implicitly defined {@code EOF} token, which has the token type
-	 *  {@link Token#EOF}.</li>
-	 * </ul>
+	 *  * Tokens created by lexer rules.
+	 *  * Tokens defined in a {{{tokens{} }}} block in a lexer or parser
+	 *    grammar.
+	 *  * The implicitly defined {{{EOF}}} token, which has the token type
+	 *    {@link Token#EOF}.
 	 *
-	 * <p>The following table shows examples of lexer rules and the literal
-	 * names assigned to the corresponding token types.</p>
+	 * The following table shows examples of lexer rules and the literal
+	 * names assigned to the corresponding token types.
 	 *
-	 * <table>
-	 *  <tr>
-	 *   <th>Rule</th>
-	 *   <th>Symbolic Name</th>
-	 *  </tr>
-	 *  <tr>
-	 *   <td>{@code THIS : 'this';}</td>
-	 *   <td>{@code THIS}</td>
-	 *  </tr>
-	 *  <tr>
-	 *   <td>{@code SQUOTE : '\'';}</td>
-	 *   <td>{@code SQUOTE}</td>
-	 *  </tr>
-	 *  <tr>
-	 *   <td>{@code ID : [A-Z]+;}</td>
-	 *   <td>{@code ID}</td>
-	 *  </tr>
-	 * </table>
+	 * || ''Rule''             || ''Symbolic Name'' ||
+	 * || {{{THIS : 'this';}}} || {{{THIS}}}        ||
+	 * || {{{SQUOTE : '\'';}}} || {{{SQUOTE}}}      ||
+	 * || {{{ID : [A-Z]+;}}}   || {{{ID}}}}         ||
 	 *
 	 * @param token_type The token type.
 	 *
 	 * @return The symbolic name associated with the specified token type, or
-	 * {@code null} if no symbolic name is associated with the type.
+	 * {{{null}}} if no symbolic name is associated with the type.
 	 */
 	public abstract string get_symbolic_name(int token_type);
 
 	/**
 	 * Gets the display name of a token type.
 	 *
-	 * <p>ANTLR provides a default implementation of this method, but
+	 * ANTLR provides a default implementation of this method, but
 	 * applications are free to override the behavior in any manner which makes
 	 * sense for the application. The default implementation returns the first
-	 * result from the following list which produces a non-{@code null}
-	 * result.</p>
+	 * result from the following list which produces a non-{{{null}}}
+	 * result.
 	 *
-	 * <ol>
-	 *  <li>The result of {@link #getLiteralName}</li>
-	 *  <li>The result of {@link #getSymbolicName}</li>
-	 *  <li>The result of {@link Integer#toString}</li>
-	 * </ol>
+	 *  # The result of {@link #getLiteralName}
+	 *  # The result of {@link #getSymbolicName}
+	 *  # The result of {@link Integer#toString}
 	 *
 	 * @param token_type The token type.
 	 *

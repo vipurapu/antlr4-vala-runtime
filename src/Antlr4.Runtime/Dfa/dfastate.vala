@@ -35,13 +35,13 @@ using Antlr4.Runtime;
  * I have to add a stack to simulate the proper lookahead sequences for
  * the underlying LL grammar from which the ATN was derived.
  *
- * <p>I use a set of ATNConfig objects not simple states.  An ATNConfig
+ * I use a set of ATNConfig objects not simple states.  An ATNConfig
  * is both a state (ala normal conversion) and a RuleContext describing
- * the chain of rules (if any) followed to arrive at that state.</p>
+ * the chain of rules (if any) followed to arrive at that state.
  *
- * <p>A DFA state may have multiple references to a particular state,
+ * A DFA state may have multiple references to a particular state,
  * but with different ATN contexts (with same or different alts)
- * meaning that state was reached via a different set of rule invocations.</p>
+ * meaning that state was reached via a different set of rule invocations.
  */
 public class Antlr4.Runtime.Dfa.DFAState : GLib.Object, Hashable
 {
@@ -50,8 +50,8 @@ public class Antlr4.Runtime.Dfa.DFAState : GLib.Object, Hashable
 	public ATNConfigSet? configs = new ATNConfigSet();
 
 	/**
-	 * {@code edges[symbol]} points to target of symbol. Shift up by 1 so (-1)
-	 * {@link Token#EOF} maps to {@code edges[0]}.
+	 * {{{edges[symbol]}}} points to target of symbol. Shift up by 1 so (-1)
+	 * {@link Token#EOF} maps to {{{edges[0]}}}.
 	 */
 
 	public DFAState[] edges;
@@ -59,7 +59,7 @@ public class Antlr4.Runtime.Dfa.DFAState : GLib.Object, Hashable
 	public bool is_accept_state = false;
 
 	/** if accept state, what ttype do we match or alt do we predict?
-	 * This is set to {@link ATN#INVALID_ALT_NUMBER} when {@link #predicates}{@code !=null} or
+	 * This is set to {@link ATN#INVALID_ALT_NUMBER} when {@link #predicates}{{{!=null}}} or
 	 * {@link #requires_full_context}.
 	 */
 	public int prediction;
@@ -76,15 +76,15 @@ public class Antlr4.Runtime.Dfa.DFAState : GLib.Object, Hashable
 
 	/** During SLL parsing, this is a list of predicates associated with the
 	 * ATN configurations of the DFA state. When we have predicates,
-	 * {@link #requires_full_context} is {@code false} since full context prediction evaluates predicates
+	 * {@link #requires_full_context} is {{{false}}} since full context prediction evaluates predicates
 	 * on-the-fly. If this is not null, then {@link #prediction} is
 	 * {@link ATN#INVALID_ALT_NUMBER}.
 	 *
-	 * <p>We only use these for non-{@link #requires_full_context} but conflicting states. That
+	 * We only use these for non-{@link #requires_full_context} but conflicting states. That
 	 * means we know from the context (it's $ or we don't dip into outer
-	 * context) that it's an ambiguity not a conflict.</p>
+	 * context) that it's an ambiguity not a conflict.
 	 *
-	 * <p>This list is computed by {@link ParserATNSimulator#predicateDFAState}.</p>
+	 * This list is computed by {@link ParserATNSimulator#predicateDFAState}.
 	 */
 
 	public PredPrediction[]? predicates;
@@ -141,14 +141,14 @@ public class Antlr4.Runtime.Dfa.DFAState : GLib.Object, Hashable
 	 * Two {@link DFAState} instances are equal if their ATN configuration sets
 	 * are the same. This method is used to see if a state already exists.
 	 *
-	 * <p>Because the number of alternatives and number of ATN configurations are
+	 * Because the number of alternatives and number of ATN configurations are
 	 * finite, there is a finite number of DFA states that can be processed.
-	 * This is necessary to show that the algorithm terminates.</p>
+	 * This is necessary to show that the algorithm terminates.
 	 *
-	 * <p>Cannot test the DFA state numbers here because in
+	 * Cannot test the DFA state numbers here because in
 	 * {@link ParserATNSimulator#addDFAState} we need to know if any other state
 	 * exists that has this exact set of ATN configurations. The
-	 * {@link #state_number} is irrelevant.</p>
+	 * {@link #state_number} is irrelevant.
 	 */
 	public bool equals(DFAState o)
 	{

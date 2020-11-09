@@ -50,7 +50,7 @@ public class Antlr4.Runtime.Misc.InterpreterDataReader : GLib.Object
 	 * ...
 	 *
 	 * atn:
-	 * <a single line with comma separated int values> enclosed in a pair of squared streamackets.
+	 * < a single line with comma separated int values > enclosed in a pair of squared streamackets.
 	 *
 	 * Data for a parser does not contain channel and mode names.
 	 */

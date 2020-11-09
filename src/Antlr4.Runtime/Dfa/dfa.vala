@@ -36,8 +36,8 @@ public class Antrl4.Runtime.DFA : GLib.Object
     public DecisionState atn_start_state;
 
     /**
-     * {@code true} if this DFA is for a precedence decision otherwise,
-     * {@code false}. This is the backing field for {@link #is_precedence_dfa}.
+     * {{{true}}} if this DFA is for a precedence decision otherwise,
+     * {{{false}}}. This is the backing field for {@link #is_precedence_dfa}.
      */
     private bool precedence_dfa { get; construct; }
 
@@ -69,8 +69,8 @@ public class Antrl4.Runtime.DFA : GLib.Object
      * supplying individual start states corresponding to specific precedence
      * values.
      *
-     * @return {@code true} if this is a precedence DFA otherwise,
-     * {@code false}.
+     * @return {{{true}}} if this is a precedence DFA otherwise,
+     * {{{false}}}.
      * @see Parser#getPrecedence()
      */
     public bool is_precedence_dfa
@@ -137,7 +137,7 @@ public class Antrl4.Runtime.DFA : GLib.Object
     private static void sort_dfa_states(ref Gee.List<DFAState> states)
     {
         // A simple bubble sort algorithm.
-        // <https://stackabuse.com/sorting-algorithms-in-java/>
+        // [[https://stackabuse.com/sorting-algorithms-in-java/]]
         bool sorted = false;
         DFAState j;
         while (!sorted)

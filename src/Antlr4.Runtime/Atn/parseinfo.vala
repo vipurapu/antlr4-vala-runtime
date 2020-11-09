@@ -121,9 +121,8 @@ public class Antlr4.Runtime.Atn.ParseInfo : GLib.Object
 	 * Gets the total number of ATN lookahead operations for SLL and LL
 	 * prediction across all decisions made during parsing.
 	 *
-	 * <p>
 	 * This value is the sum of {@link #getTotalSLLATNLookaheadOps} and
-	 * {@link #getTotalLLATNLookaheadOps}.</p>
+	 * {@link #getTotalLLATNLookaheadOps}.
 	 */
 	public long getTotalATNLookaheadOps() {
 		DecisionInfo[] decisions = atnSimulator.getDecisionInfo();

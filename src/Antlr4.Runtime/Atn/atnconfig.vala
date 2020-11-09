@@ -54,12 +54,10 @@ public class Antlr4.Runtime.Atn.ATNConfig : GLib.Object, Hashable
 	 * dependent predicates unless we are in the rule that initially
 	 * invokes the ATN simulator.
 	 *
-	 * <p>
 	 * closure() tracks the depth of how far we dip into the outer context:
 	 * depth &gt; 0.  Note that it may not be totally accurate depth since I
-	 * don't ever decrement. TODO: make it a boolean then</p>
+	 * don't ever decrement. TODO: make it a boolean then
 	 *
-	 * <p>
 	 * For memory efficiency, the {@link #is_precedence_filter_suppressed} method
 	 * is also backed by this field. Since the field is publicly accessible, the
 	 * highest bit which would not cause the value to become negative is used to
@@ -68,7 +66,7 @@ public class Antlr4.Runtime.Atn.ATNConfig : GLib.Object, Hashable
 	 * flag. It also ensures the performance of the existing {@link ATNConfig}
 	 * constructors as well as certain operations like
 	 * {@link ATNConfigSet#add(ATNConfig, DoubleKeyMap)} method are
-	 * <em>completely</em> unaffected by the change.</p>
+	 * //completely// unaffected by the change.
 	 */
 	public int reaches_into_outer_context;
 

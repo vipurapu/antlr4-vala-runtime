@@ -144,9 +144,9 @@ public class ATNDeserializer {
 	 * supported in the serialized ATN.
 	 * @param actualUuid The {@link UUID} of the actual serialized ATN which is
 	 * currently being deserialized.
-	 * @return {@code true} if the {@code actualUuid} value represents a
-	 * serialized ATN at or after the feature identified by {@code feature} was
-	 * introduced; otherwise, {@code false}.
+	 * @return {{{true}}} if the {{{actualUuid}}} value represents a
+	 * serialized ATN at or after the feature identified by {{{feature}}} was
+	 * introduced; otherwise, {{{false}}}.
 	 */
 	static protected boolean isFeatureSupported(UUID feature, UUID actualUuid) {
 		int featureIndex = SUPPORTED_UUIDS.indexOf(feature);
